@@ -1,0 +1,27 @@
+[package]
+name = "yt-dli"
+version = "0.0.1"
+authors = ["Xarvex"]
+edition = "2024"
+rust-version = "1.87.0" # cargo-msrv on 2025-09-04
+
+description = "Thin wrapper around 'yt-dlp' allowing for profiles and quick interactive use"
+repository = "https://codeberg.org/xarvex/yt-dli"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "env", "wrap_help"] }
+clap_complete = { version = "4.5", features = ["unstable-dynamic"] }
+derive_more = { version = "2", features = ["from"] }
+dialoguer = { version = "0.12", default-features = false }
+directories = "6"
+icu_collator = "2"
+icu_provider = "2"
+itertools = "0.14"
+shlex = "1"
+thiserror = "2"
+
+[profile.release]
+opt-level = 3
+strip = true
+lto = true
+panic = "abort"
