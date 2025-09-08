@@ -1,5 +1,6 @@
 use std::{
     ffi::OsStr,
+    path::PathBuf,
     process::{self, ExitCode},
 };
 
@@ -23,7 +24,8 @@ where
     }
 
     Ok(ytdlp
-        .status()?
+        .status()
+        .map_err(|e| (e, PathBuf::from("yt-dlp")))?
         .code()
         .map(|c| ExitCode::from(c as u8))
         .unwrap_or(ExitCode::FAILURE))
