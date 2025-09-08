@@ -3,7 +3,7 @@ use std::{env, process::ExitCode};
 use clap::{CommandFactory, Parser};
 
 use crate::{
-    cli::{COMPLETION_VAR, Cli, CliSubcommand, completion_factory},
+    cli::{Cli, CliSubcommand},
     error::Result,
     exec::ytdlp,
     interaction::{prompt_extra_args, prompt_profiles},
@@ -19,7 +19,7 @@ mod profile;
 mod util;
 
 fn main() -> ExitCode {
-    completion_factory();
+    Cli::completion_factory();
 
     let mut cmd = Cli::command();
     let cli = Cli::parse();
@@ -34,9 +34,9 @@ fn main_cli(cli: Cli) -> Result<ExitCode> {
                 // Program is single-threaded, so this operation is safe. Must do this as
                 // `clap_complete` doesn't have a way to use the completion generation directly.
                 unsafe {
-                    env::set_var(COMPLETION_VAR, shell.to_string());
+                    env::set_var(Cli::COMPLETION_VAR, shell.to_string());
                 }
-                completion_factory();
+                Cli::completion_factory();
             }
             CliSubcommand::ListProfiles => {
                 let profiles = sort_dir_results(profiles()?)?;

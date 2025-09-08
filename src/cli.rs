@@ -9,8 +9,6 @@ use clap_complete::{ArgValueCompleter, CompleteEnv, PathCompleter, Shell};
 
 use crate::profile::{PROFILE_DIRECTORY, profile_exists, profile_path};
 
-pub const COMPLETION_VAR: &str = "YTDLI_COMPLETE";
-
 /// Thin wrapper around 'yt-dlp' allowing for profiles and quick interactive use.
 ///
 ///
@@ -77,6 +75,16 @@ pub struct Cli {
     pub extra_args: Option<Vec<OsString>>,
 }
 
+impl Cli {
+    pub const COMPLETION_VAR: &str = "YTDLI_COMPLETE";
+
+    pub fn completion_factory() {
+        CompleteEnv::with_factory(Self::command)
+            .var(Self::COMPLETION_VAR)
+            .complete();
+    }
+}
+
 #[derive(Subcommand)]
 #[command(subcommand_negates_reqs = true)]
 pub enum CliSubcommand {
@@ -96,12 +104,6 @@ pub enum CliSubcommand {
     ///
     /// This list is sorted according to locale and does take into account numerical ordering.
     ListProfiles,
-}
-
-pub fn completion_factory() {
-    CompleteEnv::with_factory(Cli::command)
-        .var(COMPLETION_VAR)
-        .complete();
 }
 
 #[derive(Clone)]
