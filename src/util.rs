@@ -1,14 +1,19 @@
 use std::{convert::From, ffi::OsString, fs::DirEntry, sync::LazyLock};
 
 use derive_more::From;
-use directories::ProjectDirs;
+use etcetera::{AppStrategyArgs, app_strategy::Xdg, choose_app_strategy};
 use icu_collator::{Collator, CollatorPreferences, preferences::CollationNumericOrdering};
 use itertools::Itertools;
 
 use crate::error::Result;
 
-pub static DIRECTORIES: LazyLock<ProjectDirs> = LazyLock::new(|| {
-    ProjectDirs::from("com.xarvex", "", "yt-dli").expect("failure registering project directories")
+pub static DIRECTORIES: LazyLock<Xdg> = LazyLock::new(|| {
+    choose_app_strategy(AppStrategyArgs {
+        top_level_domain: "com".to_string(),
+        author: env!("CARGO_PKG_AUTHORS").to_string(),
+        app_name: env!("CARGO_PKG_NAME").to_string(),
+    })
+    .expect("failure registering application directories")
 });
 
 // TODO: Find a "better" and generic way to handle this.

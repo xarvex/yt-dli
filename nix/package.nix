@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xarvex ];
     mainProgram = manifest.name;
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; darwin ++ linux;
   };
 }

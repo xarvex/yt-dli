@@ -13,7 +13,7 @@ clap = { version = "4.5", features = ["derive", "env", "wrap_help"] }
 clap_complete = { version = "4.5", features = ["unstable-dynamic"] }
 derive_more = { version = "2", features = ["from"] }
 dialoguer = { version = "0.12", default-features = false }
-directories = "6"
+etcetera = "0.10"
 icu_collator = "2"
 icu_provider = "2"
 itertools = "0.14"

@@ -57,7 +57,7 @@ pub struct Cli {
         id = "profile",
         short,
         long,
-        add = ArgValueCompleter::new(PathCompleter::file().current_dir(*PROFILE_DIRECTORY)),
+        add = ArgValueCompleter::new(PathCompleter::file().current_dir(PROFILE_DIRECTORY.as_path())),
         required_if_eq("no_interactive", "true"),
         value_delimiter = ',',
         value_hint = ValueHint::Other,
