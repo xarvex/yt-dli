@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use thiserror::Error;
 
@@ -8,11 +8,8 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug, Error)]
 pub enum Error {
-    #[error("while accessing '{}': {}", .context.display(), .source)]
-    Io {
-        source: std::io::Error,
-        context: PathBuf,
-    },
+    #[error(transparent)]
+    FileContextError(#[from] FileContextError),
 
     #[error(transparent)]
     Dialoguer(#[from] dialoguer::Error),
@@ -27,19 +24,47 @@ pub enum Error {
     MissingProfiles,
 }
 
-impl From<(std::io::Error, PathBuf)> for Error {
-    fn from(value: (std::io::Error, PathBuf)) -> Self {
-        Error::Io {
-            source: value.0,
-            context: value.1,
+#[derive(Debug, Error)]
+enum FileError {
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+}
+
+#[derive(Debug, Error)]
+#[error("while accessing '{}': {}", .context.display(), .source)]
+pub struct FileContextError {
+    source: FileError,
+    context: PathBuf,
+}
+
+pub trait FileContextErrorExt {
+    fn with_path<P: AsRef<Path>>(self, path: &P) -> FileContextError;
+}
+
+pub trait FileContextResultExt<T> {
+    fn with_path<P: AsRef<Path>>(self, path: &P) -> std::result::Result<T, FileContextError>;
+}
+
+impl<E: Into<FileError>> FileContextErrorExt for E {
+    fn with_path<P: AsRef<Path>>(self, path: &P) -> FileContextError {
+        FileContextError {
+            source: self.into(),
+            context: path.as_ref().to_owned(),
         }
+    }
+}
+
+impl<T, E: Into<FileError>> FileContextResultExt<T> for std::result::Result<T, E> {
+    #[inline]
+    fn with_path<P: AsRef<Path>>(self, path: &P) -> std::result::Result<T, FileContextError> {
+        self.map_err(|e| e.with_path(path))
     }
 }
 
 impl From<Error> for clap::Error {
     fn from(error: Error) -> Self {
         match error {
-            Error::Io { .. } => std::io::Error::other(error).into(),
+            Error::FileContextError { .. } => std::io::Error::other(error).into(),
             Error::Dialoguer(e) => match e {
                 dialoguer::Error::IO(e) => e.into(),
             },

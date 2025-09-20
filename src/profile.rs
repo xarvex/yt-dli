@@ -9,7 +9,7 @@ use std::{
 use etcetera::AppStrategy;
 
 use crate::{
-    error::{Error, Result},
+    error::{Error, FileContextErrorExt, FileContextResultExt, Result},
     util::DIRECTORIES,
 };
 
@@ -24,12 +24,12 @@ pub fn profiles() -> Result<ReadDir> {
         Ok(r) => Ok(r),
         Err(e) => Err(match e.kind() {
             io::ErrorKind::NotFound => Error::MissingProfiles,
-            _ => (e, PROFILE_DIRECTORY.clone()).into(),
+            _ => e.with_path(&*PROFILE_DIRECTORY).into(),
         }),
     }
 }
 
 pub fn profile_exists(profile: &OsString) -> Result<bool> {
     let path = profile_path(profile);
-    fs::exists(&path).map_err(|e| (e, path).into())
+    Ok(fs::exists(&path).with_path(&path)?)
 }

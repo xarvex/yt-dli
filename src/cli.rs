@@ -100,6 +100,7 @@ pub enum CliSubcommand {
         #[arg(value_enum)]
         shell: Shell,
     },
+
     /// Lists all of the profiles found that can be used.
     ///
     /// This list is sorted according to locale and does take into account numerical ordering.

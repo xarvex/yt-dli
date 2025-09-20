@@ -1,0 +1,11 @@
+--paths ~/Music
+
+--format bestaudio
+
+--extract-audio
+--no-embed-subs
+--no-embed-thumbnail
+--no-embed-metadata
+--no-embed-chapters
+
+--no-sponsorblock

@@ -9,9 +9,9 @@ use crate::error::Result;
 
 pub static DIRECTORIES: LazyLock<Xdg> = LazyLock::new(|| {
     choose_app_strategy(AppStrategyArgs {
-        top_level_domain: "com".to_string(),
-        author: env!("CARGO_PKG_AUTHORS").to_string(),
-        app_name: env!("CARGO_PKG_NAME").to_string(),
+        top_level_domain: "com".to_owned(),
+        author: "Xarvex".to_owned(),
+        app_name: env!("CARGO_PKG_NAME").to_owned(),
     })
     .expect("failure registering application directories")
 });

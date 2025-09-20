@@ -1,0 +1,5 @@
+--output '%(playlist|.)s/%(playlist_index&{} - |)s%(title)s.%(ext)s'
+
+--sponsorblock-mark all
+
+--config-locations ~/.config/yt-dli/video

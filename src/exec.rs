@@ -1,10 +1,12 @@
 use std::{
     ffi::OsStr,
-    path::PathBuf,
     process::{self, ExitCode},
 };
 
-use crate::{error::Result, profile::profile_path};
+use crate::{
+    error::{FileContextResultExt, Result},
+    profile::profile_path,
+};
 
 pub fn ytdlp<PI, PS, EI, ES>(profiles: Option<PI>, extra_args: Option<EI>) -> Result<ExitCode>
 where
@@ -25,7 +27,7 @@ where
 
     Ok(ytdlp
         .status()
-        .map_err(|e| (e, PathBuf::from("yt-dlp")))?
+        .with_path(&"yt-dlp")?
         .code()
         .map(|c| ExitCode::from(c as u8))
         .unwrap_or(ExitCode::FAILURE))

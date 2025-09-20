@@ -24,10 +24,10 @@ fn main() -> ExitCode {
     let mut cmd = Cli::command();
     let cli = Cli::parse();
 
-    main_cli(cli).unwrap_or_else(|e| clap::Error::from(e).format(&mut cmd).exit())
+    run(cli).unwrap_or_else(|e| clap::Error::from(e).format(&mut cmd).exit())
 }
 
-fn main_cli(cli: Cli) -> Result<ExitCode> {
+fn run(cli: Cli) -> Result<ExitCode> {
     if let Some(subcommand) = cli.subcommand {
         match subcommand {
             CliSubcommand::Completions { shell } => {

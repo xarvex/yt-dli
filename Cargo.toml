@@ -1,10 +1,10 @@
 [package]
 name = "yt-dli"
 version = "0.0.1"
-authors = ["Xarvex"]
 edition = "2024"
 rust-version = "1.87.0" # cargo-msrv on 2025-09-04
 
+license-file = "LICENSE"
 description = "Thin wrapper around 'yt-dlp' allowing for profiles and quick interactive use"
 repository = "https://codeberg.org/xarvex/yt-dli"
 

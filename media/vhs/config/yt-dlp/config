@@ -1,0 +1,13 @@
+--paths ~/Videos
+--windows-filenames
+--mtime
+
+--simulate
+
+--sub-format ass/srt/best
+--sub-langs en,en-us,eng,english,sv,swe,swedish
+
+--embed-subs
+--embed-thumbnail
+--embed-metadata
+--embed-chapters
